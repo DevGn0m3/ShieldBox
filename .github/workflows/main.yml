@@ -1,4 +1,4 @@
-name: "CodeQL Analysis"
+name: "CodeQL & .NET Bug Analysis"
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   analyze:
-    name: Analyze
+    name: Analyze & Bug Check
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -19,14 +19,29 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # 1. Configura el entorno oficial de .NET
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x' # Asegúrate de cambiar esto por la versión de tu proyecto (e.g., 6.0, 9.0)
+
+    # 2. Descarga los paquetes y librerías del proyecto
+    - name: Restore dependencies
+      run: dotnet restore
+
+    # 3. Analiza el código buscando errores lógicos y de ejecución
+    # Al compilar con /warnaserror, cualquier advertencia de bug real romperá el flujo.
+    - name: Verify Code for Bugs and Errors
+      run: |
+        dotnet build --no-restore /p:TreatWarningsAsErrors=true /p:AnalysisLevel=latest
+
+    # 4. Inicializa el escaneo complementario de seguridad de CodeQL
     - name: Initialize CodeQL
-      # Actualizado a v4 para evitar la obsolescencia de diciembre de 2026
-      uses: github/codeql-action/init@v4 
+      uses: github/codeql-action/init@v4
       with:
         languages: 'csharp'
         build-mode: none 
         tools: linked 
 
     - name: Perform CodeQL Analysis
-      # Actualizado a v4 para coincidir con el paso de inicialización
       uses: github/codeql-action/analyze@v4

@@ -23,8 +23,11 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: 'csharp'
-        # Fuerza el uso del motor de análisis más reciente compatible con el entorno de GitHub
-        tools: latest 
+        # Indica a CodeQL que analice el código fuente de C# directamente sin requerir compilación
+        build-mode: none 
+        # Reemplaza el parámetro obsoleto 'latest' para evitar advertencias en la ejecución
+        tools: linked 
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
+

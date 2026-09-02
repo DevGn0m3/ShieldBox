@@ -20,14 +20,13 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
+      # Actualizado a v4 para evitar la obsolescencia de diciembre de 2026
+      uses: github/codeql-action/init@v4 
       with:
         languages: 'csharp'
-        # Indica a CodeQL que analice el código fuente de C# directamente sin requerir compilación
         build-mode: none 
-        # Reemplaza el parámetro obsoleto 'latest' para evitar advertencias en la ejecución
         tools: linked 
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
-
+      # Actualizado a v4 para coincidir con el paso de inicialización
+      uses: github/codeql-action/analyze@v4

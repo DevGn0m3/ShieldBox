@@ -22,7 +22,9 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
-        languages: 'javascript-typescript' # Cambialo si usas Python, Go, C#, etc.
+        languages: 'javascript-typescript'
+        # Fuerza el uso del motor de análisis más reciente compatible con el entorno de GitHub
+        tools: latest 
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
